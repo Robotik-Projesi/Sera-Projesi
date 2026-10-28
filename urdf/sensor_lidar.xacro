@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="lidar_link">
+    <visual>
+      <geometry><cylinder radius="0.04" length="0.04"/></geometry>
+      <material name="cream"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0.025"/>
+      <geometry><cylinder radius="0.03" length="0.010"/></geometry>
+      <material name="dusty_pink"/>
+    </visual>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="1e-4" iyy="1e-4" izz="1e-4" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/><child link="lidar_link"/>
+    <origin xyz="0 0 0.07"/>
+  </joint>
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <topic>scan</topic>
+      <update_rate>10</update_rate>
+      <always_on>true</always_on>
+      <gz_frame_id>lidar_link</gz_frame_id>
+      <lidar>
+        <scan><horizontal>
+          <samples>360</samples><resolution>1</resolution>
+          <min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle>
+        </horizontal></scan>
+        <range><min>0.12</min><max>6.0</max><resolution>0.01</resolution></range>
+      </lidar>
+    </sensor>
+  </gazebo>
+</robot>

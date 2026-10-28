@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+install/
+log/
+.vscode/
+.idea/
+*.mp4
+*.mkv
