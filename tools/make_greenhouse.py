@@ -154,7 +154,7 @@ def build_tomatoes(tomatoes, drng):
         v += vis(
             "pedicel",
             g_cyl(0.003, 0.07),
-            pz(0, 0.045, TOMATO_R - 0.005, math.pi / 2, 0, 0),
+            pz(0, (-0.045 if t["face"] in ("center_left", "right") else 0.045), TOMATO_R - 0.005, math.pi / 2, 0, 0),
             STEM,
         )
         links += (
@@ -185,7 +185,9 @@ def build_rows(args, drng):
             )
             for k in range(args.leaves):
                 z = drng.uniform(0.22, H - 0.02)
-                d = drng.uniform(-rw / 2.2, rw / 2.2)
+                in_band = args.z_min - 0.04 <= z <= args.z_max + 0.04
+                lim = rw / 2 - 0.07 if in_band else rw / 2.2
+                d = drng.uniform(-lim, lim)
                 v += vis(
                     f"{name}_leaf{i}_{k}",
                     g_box(drng.uniform(0.08, 0.13), drng.uniform(0.04, 0.07), 0.004),
@@ -274,6 +276,8 @@ def build_sdf(args, tomatoes, drng):
     <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
       <render_engine>ogre2</render_engine>
     </plugin>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+    <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
 
     <scene>
       <ambient>0.6 0.6 0.6 1</ambient>
