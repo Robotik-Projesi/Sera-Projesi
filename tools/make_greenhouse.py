@@ -17,6 +17,7 @@ import random
 RED_SHADES = [(0.90, 0.08, 0.08), (0.85, 0.10, 0.06), (0.80, 0.07, 0.07)]
 UNRIPE_SHADES = [(0.60, 0.90, 0.15), (0.65, 0.88, 0.20), (0.55, 0.85, 0.18)]
 LEAF_SHADES = [(0.08, 0.32, 0.10), (0.12, 0.40, 0.12), (0.10, 0.28, 0.09)]
+BACK_WALL_COLOR = (0.04, 0.18, 0.05)  # Opak koyu yeşil ayırıcı duvar (görüşü engeller)
 BACK = (0.06, 0.22, 0.07)
 STEM = (0.20, 0.32, 0.10)
 CALYX = (0.10, 0.35, 0.10)
@@ -173,6 +174,14 @@ def build_rows(args, drng):
     for name, y_pos in rows:
         v = vis(f"{name}_trough", g_box(L, rw, 0.20), pz(L / 2, y_pos, 0.10), WOOD)
         v += vis(f"{name}_soil", g_box(L - 0.1, rw - 0.08, 0.02), pz(L / 2, y_pos, 0.21), SOIL_DARK)
+        
+        # OPAK ARKA DUVAR: Yan koridordaki domateslerin arka taraftan görülmesini engeller
+        v += vis(
+            f"{name}_back_wall",
+            g_box(L, 0.02, H - 0.1),
+            pz(L / 2, y_pos, (H + 0.1) / 2),
+            BACK_WALL_COLOR
+        )
         
         n_plants = int((L - 0.4) / args.plant_step) + 1
         for i in range(n_plants):
