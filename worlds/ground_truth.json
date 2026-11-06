@@ -1,0 +1,344 @@
+{
+  "seed": 42,
+  "corridors": 2,
+  "ripe_total": 24,
+  "unripe_total": 18,
+  "tomatoes": [
+    {
+      "id": 35,
+      "kind": "unripe",
+      "face": "left",
+      "x": 0.729,
+      "y": 0.983,
+      "z": 0.261
+    },
+    {
+      "id": 5,
+      "kind": "ripe",
+      "face": "center_left",
+      "x": 1.061,
+      "y": 0.209,
+      "z": 0.324
+    },
+    {
+      "id": 26,
+      "kind": "ripe",
+      "face": "right",
+      "x": 1.087,
+      "y": -0.987,
+      "z": 0.592
+    },
+    {
+      "id": 2,
+      "kind": "ripe",
+      "face": "left",
+      "x": 1.505,
+      "y": 0.993,
+      "z": 0.519
+    },
+    {
+      "id": 3,
+      "kind": "ripe",
+      "face": "right",
+      "x": 1.729,
+      "y": -0.987,
+      "z": 0.532
+    },
+    {
+      "id": 21,
+      "kind": "unripe",
+      "face": "center_right",
+      "x": 1.78,
+      "y": -0.214,
+      "z": 0.584
+    },
+    {
+      "id": 16,
+      "kind": "unripe",
+      "face": "left",
+      "x": 1.843,
+      "y": 0.994,
+      "z": 0.353
+    },
+    {
+      "id": 4,
+      "kind": "unripe",
+      "face": "center_left",
+      "x": 2.034,
+      "y": 0.183,
+      "z": 0.57
+    },
+    {
+      "id": 12,
+      "kind": "unripe",
+      "face": "center_right",
+      "x": 3.079,
+      "y": -0.196,
+      "z": 0.385
+    },
+    {
+      "id": 41,
+      "kind": "ripe",
+      "face": "right",
+      "x": 3.358,
+      "y": -1.018,
+      "z": 0.479
+    },
+    {
+      "id": 13,
+      "kind": "unripe",
+      "face": "left",
+      "x": 3.565,
+      "y": 0.999,
+      "z": 0.338
+    },
+    {
+      "id": 24,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 3.628,
+      "y": -0.188,
+      "z": 0.334
+    },
+    {
+      "id": 23,
+      "kind": "ripe",
+      "face": "right",
+      "x": 3.798,
+      "y": -1.016,
+      "z": 0.377
+    },
+    {
+      "id": 9,
+      "kind": "unripe",
+      "face": "left",
+      "x": 4.063,
+      "y": 0.994,
+      "z": 0.599
+    },
+    {
+      "id": 38,
+      "kind": "unripe",
+      "face": "center_left",
+      "x": 4.111,
+      "y": 0.203,
+      "z": 0.335
+    },
+    {
+      "id": 1,
+      "kind": "ripe",
+      "face": "left",
+      "x": 4.263,
+      "y": 1.017,
+      "z": 0.491
+    },
+    {
+      "id": 37,
+      "kind": "unripe",
+      "face": "right",
+      "x": 4.298,
+      "y": -0.998,
+      "z": 0.503
+    },
+    {
+      "id": 33,
+      "kind": "ripe",
+      "face": "right",
+      "x": 4.48,
+      "y": -1.019,
+      "z": 0.444
+    },
+    {
+      "id": 14,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 4.559,
+      "y": -0.182,
+      "z": 0.488
+    },
+    {
+      "id": 18,
+      "kind": "unripe",
+      "face": "right",
+      "x": 4.835,
+      "y": -0.981,
+      "z": 0.517
+    },
+    {
+      "id": 7,
+      "kind": "unripe",
+      "face": "left",
+      "x": 4.993,
+      "y": 0.986,
+      "z": 0.511
+    },
+    {
+      "id": 29,
+      "kind": "ripe",
+      "face": "right",
+      "x": 5.067,
+      "y": -0.981,
+      "z": 0.575
+    },
+    {
+      "id": 22,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 5.118,
+      "y": -0.183,
+      "z": 0.46
+    },
+    {
+      "id": 40,
+      "kind": "ripe",
+      "face": "left",
+      "x": 5.575,
+      "y": 0.994,
+      "z": 0.394
+    },
+    {
+      "id": 36,
+      "kind": "ripe",
+      "face": "left",
+      "x": 5.773,
+      "y": 1.001,
+      "z": 0.347
+    },
+    {
+      "id": 0,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 6.055,
+      "y": -0.21,
+      "z": 0.412
+    },
+    {
+      "id": 11,
+      "kind": "ripe",
+      "face": "right",
+      "x": 6.108,
+      "y": -1.014,
+      "z": 0.306
+    },
+    {
+      "id": 31,
+      "kind": "ripe",
+      "face": "right",
+      "x": 6.534,
+      "y": -0.993,
+      "z": 0.381
+    },
+    {
+      "id": 27,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 6.555,
+      "y": -0.215,
+      "z": 0.481
+    },
+    {
+      "id": 30,
+      "kind": "unripe",
+      "face": "center_left",
+      "x": 6.591,
+      "y": 0.208,
+      "z": 0.5
+    },
+    {
+      "id": 15,
+      "kind": "unripe",
+      "face": "center_left",
+      "x": 6.738,
+      "y": 0.215,
+      "z": 0.513
+    },
+    {
+      "id": 25,
+      "kind": "ripe",
+      "face": "left",
+      "x": 7.009,
+      "y": 1.003,
+      "z": 0.278
+    },
+    {
+      "id": 39,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 7.046,
+      "y": -0.204,
+      "z": 0.283
+    },
+    {
+      "id": 34,
+      "kind": "ripe",
+      "face": "right",
+      "x": 7.064,
+      "y": -1.02,
+      "z": 0.498
+    },
+    {
+      "id": 10,
+      "kind": "ripe",
+      "face": "center_right",
+      "x": 7.242,
+      "y": -0.2,
+      "z": 0.515
+    },
+    {
+      "id": 8,
+      "kind": "unripe",
+      "face": "right",
+      "x": 7.306,
+      "y": -0.99,
+      "z": 0.4
+    },
+    {
+      "id": 17,
+      "kind": "unripe",
+      "face": "right",
+      "x": 7.495,
+      "y": -1.02,
+      "z": 0.503
+    },
+    {
+      "id": 19,
+      "kind": "ripe",
+      "face": "left",
+      "x": 7.551,
+      "y": 0.984,
+      "z": 0.469
+    },
+    {
+      "id": 32,
+      "kind": "unripe",
+      "face": "center_left",
+      "x": 7.614,
+      "y": 0.198,
+      "z": 0.337
+    },
+    {
+      "id": 6,
+      "kind": "ripe",
+      "face": "left",
+      "x": 7.8,
+      "y": 1.015,
+      "z": 0.475
+    },
+    {
+      "id": 20,
+      "kind": "unripe",
+      "face": "left",
+      "x": 8.105,
+      "y": 1.0,
+      "z": 0.32
+    },
+    {
+      "id": 28,
+      "kind": "unripe",
+      "face": "center_right",
+      "x": 8.121,
+      "y": -0.213,
+      "z": 0.435
+    }
+  ]
+}
