@@ -43,7 +43,7 @@ def generate_launch_description():
 
     spawn = Node(package='ros_gz_sim', executable='create',
                  arguments=['-topic', 'robot_description', '-name', 'my_robot',
-                            '-x', '-1', '-y', LaunchConfiguration('spawn_y'), '-z', '0.1'])
+                            '-x', LaunchConfiguration('spawn_x'), '-y', LaunchConfiguration('spawn_y'), '-z', '0.1'])
 
     bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
                   parameters=[{'config_file': bridge_cfg}])
@@ -58,4 +58,4 @@ def generate_launch_description():
         output='screen'
     )
 
-    return LaunchDescription([world_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz, tomato_counter])
+    return LaunchDescription([world_arg, spawn_x_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz, tomato_counter])

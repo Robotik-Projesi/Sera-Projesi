@@ -2,12 +2,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
   <link name="lidar_link">
     <visual>
-      <origin xyz="0 0 -0.10"/>
-      <geometry><cylinder radius="0.012" length="0.20"/></geometry>
-      <material name="matte_dark"/>
-    </visual>
-
-    <visual>
       <origin xyz="0 0 -0.005"/>
       <geometry><cylinder radius="0.038" length="0.010"/></geometry>
       <material name="matte_dark"/>

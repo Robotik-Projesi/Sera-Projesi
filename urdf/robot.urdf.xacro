@@ -106,6 +106,28 @@
   <xacro:caster name="front" x="${caster_x}"/>
   <xacro:caster name="rear"  x="${-caster_x}"/>
 
+  <!-- Taşıyıcı Direk (Mast) -->
+  <xacro:property name="mast_r" value="0.012"/>
+  <xacro:property name="mast_h" value="0.20"/>
+  <link name="mast_link">
+    <visual>
+      <geometry><cylinder radius="${mast_r}" length="${mast_h}"/></geometry>
+      <material name="matte_dark"/>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="${mast_r}" length="${mast_h}"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.10"/>
+      <inertia ixx="1e-4" iyy="1e-4" izz="1e-5" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="mast_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="mast_link"/>
+    <origin xyz="0 0 ${body_h/2 + mast_h/2}"/>
+  </joint>
+
   <!-- Gazebo Diferansiyel Sürüş Eklentisi -->
   <gazebo>
     <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
