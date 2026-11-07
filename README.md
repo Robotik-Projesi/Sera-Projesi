@@ -24,7 +24,7 @@ ROS 2 Lyrical'ı resmi sayfadaki adımlarla kurun (apt deposu + ros-lyrical-desk
     source install/setup.bash
     ros2 launch my_robot_pkg sim.launch.py
 
-Robotu klavyeyle sürmek için ayrı terminalde:
+Robotun otonom sürüşünü başlatmak için ayrı terminalde:
 
-    ros2 run teleop_twist_keyboard teleop_twist_keyboard
+    ros2 run my_robot_pkg lidar_standalone_tester
 
