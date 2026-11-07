@@ -3,8 +3,8 @@
 Sera "olgunluk tarayici" projesi - LiDAR Algilayabilir Kucuk Engel Destekli Dunya Uretici.
 
 Uretilenler:
-    greenhouse.sdf : Gazebo dunyasi
-    ground_truth.json : Domateslerin gercek konumlari ve sayilari
+  - greenhouse.sdf     : Gazebo dunyasi
+  - ground_truth.json  : Domateslerin gercek konumlari ve sayilari
 """
 
 import argparse
@@ -49,8 +49,8 @@ def g_box(sx, sy, sz):
     return f"<geometry><box><size>{sx:.3f} {sy:.3f} {sz:.3f}</size></box></geometry>"
 
 
-def g_cyl(r, length):
-    return f"<geometry><cylinder><radius>{r:.4f}</radius><length>{length:.3f}</length></cylinder></geometry>"
+def g_cyl(r, l):
+    return f"<geometry><cylinder><radius>{r:.4f}</radius><length>{l:.3f}</length></cylinder></geometry>"
 
 
 def g_sph(r):
@@ -116,6 +116,7 @@ def lidar_obstacle_link(name, x, y_pos):
 def place_tomatoes(args, rng):
     slots = []
     n = int((args.row_length - 2 * args.margin) / args.slot_step) + 1
+    
     y_faces = [
         ("left", 1.2 - args.row_width / 2),
         ("center_left", 0.0 + args.row_width / 2),
@@ -181,7 +182,7 @@ def build_rows(args, drng):
     for name, y_pos in rows:
         v = vis(f"{name}_trough", g_box(L, rw, 0.20), pz(L / 2, y_pos, 0.10), WOOD)
         v += vis(f"{name}_soil", g_box(L - 0.1, rw - 0.08, 0.02), pz(L / 2, y_pos, 0.21), SOIL_DARK)
-
+        
         # OPAK ARKA DUVAR: Yan koridordaki domateslerin arka taraftan görülmesini engeller
         v += vis(
             f"{name}_back_wall",
@@ -189,7 +190,7 @@ def build_rows(args, drng):
             pz(L / 2, y_pos, (H + 0.1) / 2),
             BACK_WALL_COLOR
         )
-
+        
         n_plants = int((L - 0.4) / args.plant_step) + 1
         for i in range(n_plants):
             px = 0.2 + i * args.plant_step
@@ -261,7 +262,6 @@ def build_structure(args):
             v += vis(f"post_{tag}{k}", g_cyl(0.03, H), pz(x, s * W, H / 2), FRAME)
             k += 1
             x += 3.0
-
     v += vis(
         "ridge",
         g_cyl(0.03, Ltot),
@@ -407,7 +407,7 @@ def main():
     with open(gt_path, "w", encoding="utf-8") as f:
         json.dump(gt, f, indent=2)
 
-    print(f"SDF yazildi : {args.out}")
+    print(f"SDF yazildi         : {args.out}")
     print(f"Ground truth yazildi: {gt_path}")
 
 

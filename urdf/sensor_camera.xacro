@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Yer, base_link çerçevesinde: -(body_h/2 + clearance) = -0.07 m -->
+  <xacro:property name="ground_z" value="${-(body_h/2 + clearance)}"/>
+
+  <!-- Ayarlanabilir değerler (yerden yükseklik, metre) -->
+  <xacro:property name="mast_r" value="0.015"/>
+  <xacro:property name="mast_top" value="0.40"/>
+  <xacro:property name="mast_x" value="0.0"/>
+  <xacro:property name="cam_height" value="0.38"/>
+  <xacro:property name="cam_pitch" value="0.0"/>
+
+  <!-- Türetilenler -->
+  <xacro:property name="mast_z0" value="${body_h/2}"/>
+  <xacro:property name="mast_len" value="${ground_z + mast_top - mast_z0}"/>
+
+  <material name="mast_grey"><color rgba="0.35 0.35 0.38 1"/></material>
+  <material name="cam_black"><color rgba="0.05 0.05 0.05 1"/></material>
+
+  <!-- Direk: gövdenin üstünden yukarı çıkan ince silindir -->
+  <link name="mast_link">
+    <visual>
+      <geometry><cylinder radius="${mast_r}" length="${mast_len}"/></geometry>
+      <material name="mast_grey"/>
+    </visual>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="1e-4" iyy="1e-4" izz="1e-5" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="mast_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="mast_link"/>
+    <origin xyz="${mast_x} 0 ${mast_z0 + mast_len/2}"/>
+  </joint>
+
+  <!-- Kamera gövdesi: direğin ön yüzüne oturur, ileri (+x) bakar -->
+  <link name="camera_link">
+    <visual>
+      <geometry><box size="0.03 0.06 0.03"/></geometry>
+      <material name="cam_black"/>
+    </visual>
+    <inertial>
+      <mass value="0.02"/>
+      <inertia ixx="1e-5" iyy="1e-5" izz="1e-5" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="${mast_x + mast_r + 0.015} 0 ${ground_z + cam_height}" rpy="0 ${cam_pitch} 0"/>
+  </joint>
+
+  <!-- Gazebo sensör tanımı -->
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <always_on>true</always_on>
+      <update_rate>15</update_rate>
+      <topic>camera/image_raw</topic>
+      <camera>
+        <horizontal_fov>1.5708</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip><near>0.05</near><far>15</far></clip>
+      </camera>
+    </sensor>
+  </gazebo>
+</robot>

@@ -1,7 +1,7 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -15,7 +15,11 @@ def generate_launch_description():
     xacro_file = os.path.join(pkg, 'urdf', 'robot.urdf.xacro')
     bridge_cfg = os.path.join(pkg, 'config', 'bridge.yaml')
     rviz_cfg = os.path.join(pkg, 'rviz', 'robot.rviz')
-
+    
+    # Doğrudan src klasöründeki tam yolu alıyoruz:
+    home_dir = os.path.expanduser('~')
+    tomato_script = os.path.join(home_dir, 'ws', 'src', 'my_robot_pkg', 'tools', 'tomato_counter.py')
+    
     world_arg = DeclareLaunchArgument(
         'world', default_value='greenhouse.sdf',
         description='worlds/ klasöründeki SDF dosyasının adı')
@@ -39,7 +43,7 @@ def generate_launch_description():
 
     spawn = Node(package='ros_gz_sim', executable='create',
                  arguments=['-topic', 'robot_description', '-name', 'my_robot',
-                            '-x', LaunchConfiguration('spawn_x'),'-y', LaunchConfiguration('spawn_y'),'-z', '0.08','-Y', '0.0'])
+                            '-x', '-1', '-y', LaunchConfiguration('spawn_y'), '-z', '0.1'])
 
     bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
                   parameters=[{'config_file': bridge_cfg}])
@@ -48,4 +52,10 @@ def generate_launch_description():
     rviz = Node(package='rviz2', executable='rviz2', arguments=rviz_args,
                 parameters=[{'use_sim_time': True}])
 
-    return LaunchDescription([world_arg, spawn_x_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz])
+    # Python scriptini doğrudan tam dosya yolundan çalıştırıyoruz
+    tomato_counter = ExecuteProcess(
+        cmd=['python3', tomato_script],
+        output='screen'
+    )
+
+    return LaunchDescription([world_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz, tomato_counter])

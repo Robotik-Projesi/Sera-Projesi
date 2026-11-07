@@ -133,4 +133,5 @@
   </gazebo>
 
   <xacro:include filename="sensor_lidar.xacro"/>
+  <xacro:include filename="sensor_camera.xacro"/>
 </robot>
