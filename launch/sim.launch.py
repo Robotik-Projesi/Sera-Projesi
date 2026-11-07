@@ -19,14 +19,15 @@ def generate_launch_description():
     # Doğrudan src klasöründeki tam yolu alıyoruz:
     home_dir = os.path.expanduser('~')
     tomato_script = os.path.join(home_dir, 'ws', 'src', 'my_robot_pkg', 'tools', 'tomato_counter.py')
-
-    # Dünya seçimi: varsayılan sera. Eski dünya için: world:=obstacles.sdf
+    
     world_arg = DeclareLaunchArgument(
         'world', default_value='greenhouse.sdf',
         description='worlds/ klasöründeki SDF dosyasının adı')
     world_path = PathJoinSubstitution([pkg, 'worlds', LaunchConfiguration('world')])
 
-    # Başlangıç konumu: koridor 1 (rampalı) y=0.6, koridor 2 (engelli) y=-0.6
+    spawn_x_arg = DeclareLaunchArgument(
+        'spawn_x', default_value='0.0',
+        description='Robotun başlangıç x konumu (m)')
     spawn_y_arg = DeclareLaunchArgument(
         'spawn_y', default_value='0.6',
         description='Robotun başlangıç y konumu (m)')

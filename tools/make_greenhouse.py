@@ -81,19 +81,27 @@ def box_link(name, size, pose, color):
 def ramp_links(x_start, length, width, thickness, angle_deg, prefix, y_pos=0.6):
     th = math.radians(angle_deg)
     c, s = math.cos(th), math.sin(th)
-    zc = (length / 2) * s - (thickness / 2) * c
-    x_up = x_start + (length / 2) * c + (thickness / 2) * s
+    extra = 0.30
+    box_len = length + extra
+    x_mid_up = (x_start - extra * c + x_start + length * c) / 2.0
+    z_mid_up = (-extra * s + length * s) / 2.0
+    x_up = x_mid_up + (thickness / 2.0) * s
+    z_up = z_mid_up - (thickness / 2.0) * c
     x_peak = x_start + length * c
-    x_down = x_peak + (length / 2) * c - (thickness / 2) * s
-    size = (length, width, thickness)
-    up = box_link(f"{prefix}_up", size, pz(x_up, y_pos, zc, 0, -th, 0), RAMP)
-    down = box_link(f"{prefix}_down", size, pz(x_down, y_pos, zc, 0, th, 0), RAMP)
+    x_mid_down = (x_peak + x_peak + (length + extra) * c) / 2.0
+    z_mid_down = (length * s - extra * s) / 2.0
+    x_down = x_mid_down - (thickness / 2.0) * s
+    z_down = z_mid_down - (thickness / 2.0) * c
+
+    size = (box_len, width, thickness)
+    up = box_link(f'{prefix}_up', size, pz(x_up, y_pos, z_up, 0, -th, 0), RAMP)
+    down = box_link(f'{prefix}_down', size, pz(x_down, y_pos, z_down, 0, th, 0), RAMP)
     return up + down, length * s
 
 
 def lidar_obstacle_link(name, x, y_pos):
-    """LiDAR tarafindan rahatca algilanan kucuk kutu engel (25x25x12 cm)."""
-    sx, sy, sz = 0.25, 0.25, 0.12
+    """Lidar tarafindan rahatca algilanan kucuk kutu engel (25x25x25 cm)."""
+    sx, sy, sz = 0.25, 0.25, 0.50
     # Yolun bir kenarinda durur, koridoru tamamen kapatmaz
     pose = pz(x, y_pos - 0.15, sz / 2.0)
     geom = g_box(sx, sy, sz)
@@ -232,8 +240,14 @@ def build_structure(args):
     a = math.radians(20)
     xc, Ltot = L / 2, L + 4
     v = ""
+    c = ""
     for s, tag in ((+1, "l"), (-1, "r")):
-        v += vis(f"wall_{tag}", g_box(Ltot, 0.01, H), pz(xc, s * W, H / 2), GLASS, 0.85)
+        v += vis(f"wall_{tag}", g_box(Ltot, 0.15, H), pz(xc, s * W, H / 2), FRAME)
+        c += (
+            f"<collision name='wall_{tag}_col'><pose>{pz(xc, s * W, H / 2)}</pose>"
+            f"{g_box(Ltot, 0.15, H)}</collision>"
+        )
+
         panel_w = W / math.cos(a)
         v += vis(
             f"roof_{tag}",
@@ -254,7 +268,26 @@ def build_structure(args):
         pz(xc, 0, H + W * math.tan(a), 0, math.pi / 2, 0),
         FRAME,
     )
-    return f"<model name='structure'><static>true</static><link name='frame'>{v}</link></model>"
+
+    # Dis duvarlar
+    wall_w = 2 * W
+    wall_thick = 0.15
+    x_front = L + 2.0  
+    x_back = -2.0      
+
+    v += vis('wall_front', g_box(wall_thick, wall_w, H), pz(x_front, 0.0, H / 2), FRAME)
+    c += (
+        f"<collision name='wall_front_col'><pose>{pz(x_front, 0.0, H / 2)}</pose>"
+        f"{g_box(wall_thick, wall_w, H)}</collision>"
+    )
+
+    v += vis('wall_back', g_box(wall_thick, wall_w, H), pz(x_back, 0.0, H / 2), FRAME)
+    c += (
+        f"<collision name='wall_back_col'><pose>{pz(x_back, 0.0, H / 2)}</pose>"
+        f"{g_box(wall_thick, wall_w, H)}</collision>"
+    )
+
+    return f"<model name='structure'><static>true</static><link name='frame'>{c}{v}</link></model>"
 
 
 # ------------------------------------------------------------------- dunya
