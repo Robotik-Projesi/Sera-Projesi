@@ -1,7 +1,7 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -15,6 +15,10 @@ def generate_launch_description():
     xacro_file = os.path.join(pkg, 'urdf', 'robot.urdf.xacro')
     bridge_cfg = os.path.join(pkg, 'config', 'bridge.yaml')
     rviz_cfg = os.path.join(pkg, 'rviz', 'robot.rviz')
+    
+    # Doğrudan src klasöründeki tam yolu alıyoruz:
+    home_dir = os.path.expanduser('~')
+    tomato_script = os.path.join(home_dir, 'ws', 'src', 'my_robot_pkg', 'tools', 'tomato_counter.py')
 
     # Dünya seçimi: varsayılan sera. Eski dünya için: world:=obstacles.sdf
     world_arg = DeclareLaunchArgument(
@@ -47,4 +51,10 @@ def generate_launch_description():
     rviz = Node(package='rviz2', executable='rviz2', arguments=rviz_args,
                 parameters=[{'use_sim_time': True}])
 
-    return LaunchDescription([world_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz])
+    # Python scriptini doğrudan tam dosya yolundan çalıştırıyoruz
+    tomato_counter = ExecuteProcess(
+        cmd=['python3', tomato_script],
+        output='screen'
+    )
+
+    return LaunchDescription([world_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz, tomato_counter])
