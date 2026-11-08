@@ -24,7 +24,30 @@ ROS 2 Lyrical'ı resmi sayfadaki adımlarla kurun (apt deposu + ros-lyrical-desk
     source install/setup.bash
     ros2 launch my_robot_pkg sim.launch.py
 
-Robotun otonom sürüşünü başlatmak için ayrı terminalde:
+`sim.launch.py` içindeki `behavior_node` robotu otomatik sürer (`/cmd_vel`'in tek yayıncısı).
+`lidar_standalone_tester` yalnızca LiDAR'ı tek başına denemek içindir; `behavior_node` ile
+aynı anda çalıştırmayın (iki yayıncı `/cmd_vel`'i çakıştırır).
 
-    ros2 run my_robot_pkg lidar_standalone_tester
+## Topic'ler
+| Topic | Tip | Yayınlayan | Dinleyen |
+|-------|-----|------------|----------|
+| `/scan` | LaserScan | Gazebo (LiDAR) | behavior_node |
+| `/odom` | Odometry | Gazebo | behavior_node |
+| `/camera/image_raw` | Image | Gazebo (kamera) | tomato_counter |
+| `/imu` | Imu | Gazebo | behavior_node |
+| `/bumper` | ros_gz_interfaces/Contacts | Gazebo | behavior_node |
+| `/ripe_count` | Int32 | tomato_counter | izleme |
+| `/behavior_state` | String | behavior_node | izleme |
+| `/cmd_vel` | Twist | yalnızca behavior_node | Gazebo |
+
+## Davranış Mantığı
+`behavior_node` her turda şu sırayla bakar, ilk komut veren kazanır:
+1. `bumper_recovery`: çarpma olursa geri çekilir, sonra LiDAR şerit takibine yanal ofset verir
+2. `tilt_guard`: IMU eğimi eşiği aşarsa durur; eğimde yavaşlatır (rampada durdurmaz)
+3. `lidar_navigation`: şerit takibi ve engelden kaçış
+4. varsayılan: ileri git
+
+Eşikler `config/behavior_params.yaml` içindedir. Aktif davranışı canlı görmek için:
+
+    ros2 topic echo /behavior_state
 
