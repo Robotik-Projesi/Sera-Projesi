@@ -54,9 +54,11 @@ def generate_launch_description():
                 parameters=[{'use_sim_time': True}])
 
     # Python scriptini doğrudan tam dosya yolundan çalıştırıyoruz
-    tomato_counter = ExecuteProcess(
-        cmd=['python3', tomato_script],
-        output='screen'
+    tomato_counter = Node(
+    package='my_robot_pkg',
+    executable='tomato_counter',  # Uzantı (.py) olmadan yazılır
+    name='tomato_counter_node',
+    output='screen'
     )
 
     # Uye C: tek /cmd_vel cikisi (bumper > tilt > lidar > varsayilan)
