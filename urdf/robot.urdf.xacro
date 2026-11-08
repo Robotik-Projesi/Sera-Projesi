@@ -156,4 +156,6 @@
 
   <xacro:include filename="sensor_lidar.xacro"/>
   <xacro:include filename="sensor_camera.xacro"/>
+  <xacro:include filename="sensor_imu.xacro"/>
+  <xacro:include filename="sensor_bumper.xacro"/>
 </robot>

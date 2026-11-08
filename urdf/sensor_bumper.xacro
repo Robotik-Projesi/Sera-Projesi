@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!-- Uye C: Bumper (contact sensor). Govde onunde ince bir plaka.
+     Govde: silindir yaricap 0.145, on yon +x. Plakanin alt kenari zeminden
+     ~5.5 cm yukarida, boylece 6 derecelik rampaya takilmaz.
+     NOT: preserveFixedJoint, linkin sabit eklemle govdeye gomulmesini (lump)
+     engeller; boylece collision adi "bumper_link_collision" olarak kalir. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="bumper_x" value="${body_r + 0.012}"/>
+  <xacro:property name="bumper_w" value="0.20"/>
+  <xacro:property name="bumper_h" value="0.05"/>
+  <xacro:property name="bumper_t" value="0.016"/>
+
+  <link name="bumper_link">
+    <visual>
+      <geometry><box size="${bumper_t} ${bumper_w} ${bumper_h}"/></geometry>
+      <material name="accent_rim"/>
+    </visual>
+    <collision>
+      <geometry><box size="${bumper_t} ${bumper_w} ${bumper_h}"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="1e-5" iyy="1e-5" izz="1e-5" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="bumper_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="bumper_link"/>
+    <origin xyz="${bumper_x} 0 0.02" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo reference="bumper_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <gazebo reference="bumper_link">
+    <sensor name="bumper_sensor" type="contact">
+      <always_on>true</always_on>
+      <update_rate>30</update_rate>
+      <topic>bumper</topic>
+      <contact>
+        <collision>bumper_link_collision</collision>
+      </contact>
+    </sensor>
+  </gazebo>
+</robot>
