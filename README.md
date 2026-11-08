@@ -4,7 +4,7 @@
     |      Üye       | Öğrenci No |               Görev                |
     |----------------|------------|------------------------------------|
     | Hacer Cansevdi | 1306220064 | Lidar, robot gövdesi, launch       |
-    | Edanur Çınar   | 1306220037 | Kamera, sera dünyası               |
+    | Edanur Çınar   | 1306220037 | Kamera, sera dünyası ,domates sayımı|
     | Hicran Demir   | 1306220039 | IMU, bumper, davranış entegrasyonu |
 
 ## Gereksinimler
