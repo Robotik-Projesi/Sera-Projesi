@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_robot">
+  <xacro:property name="body_r" value="0.145"/>
+  <xacro:property name="body_h" value="0.08"/>
+  <xacro:property name="body_m" value="3.0"/>
+  <xacro:property name="wheel_r" value="0.06"/>
+  <xacro:property name="wheel_t" value="0.025"/>
+  <xacro:property name="wheel_m" value="0.25"/>
+  <xacro:property name="wheel_y" value="0.13"/>
+  <xacro:property name="caster_r" value="0.025"/>
+  <xacro:property name="caster_x" value="0.095"/>
+  <xacro:property name="clearance" value="0.02"/>
+
+  <material name="dusty_pink"><color rgba="0.86 0.68 0.72 1.0"/></material>
+  <material name="matte_dark"><color rgba="0.15 0.15 0.17 1.0"/></material>
+  <material name="accent_rim"><color rgba="0.25 0.25 0.28 1.0"/></material>
+
+  <xacro:macro name="cyl_inertia" params="m r h">
+    <inertia ixx="${m*(3*r*r+h*h)/12}" iyy="${m*(3*r*r+h*h)/12}" izz="${m*r*r/2}" ixy="0" ixz="0" iyz="0"/>
+  </xacro:macro>
+
+  <!-- Ana Gövde -->
+  <link name="base_link">
+    <visual>
+      <geometry><cylinder radius="${body_r}" length="${body_h}"/></geometry>
+      <material name="dusty_pink"/>
+    </visual>
+    <visual>
+      <origin xyz="${body_r - 0.02} 0 ${body_h/2 + 0.001}"/>
+      <geometry><box size="0.025 0.008 0.002"/></geometry>
+      <material name="matte_dark"/>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="${body_r}" length="${body_h}"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="${body_m}"/>
+      <xacro:cyl_inertia m="${body_m}" r="${body_r}" h="${body_h}"/>
+    </inertial>
+  </link>
+
+  <!-- Tekerlekler -->
+  <xacro:macro name="wheel" params="name y">
+    <link name="${name}_wheel">
+      <visual>
+        <geometry><cylinder radius="${wheel_r}" length="${wheel_t}"/></geometry>
+        <material name="matte_dark"/>
+      </visual>
+      <visual>
+        <geometry><cylinder radius="${wheel_r * 0.55}" length="${wheel_t + 0.002}"/></geometry>
+        <material name="accent_rim"/>
+      </visual>
+      <collision>
+        <geometry><cylinder radius="${wheel_r}" length="${wheel_t}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="${wheel_m}"/>
+        <inertia ixx="${wheel_m*(3*wheel_r*wheel_r+wheel_t*wheel_t)/12}"
+                 iyy="${wheel_m*(3*wheel_r*wheel_r+wheel_t*wheel_t)/12}"
+                 izz="${wheel_m*wheel_r*wheel_r/2}" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_wheel"/>
+      <origin xyz="0 ${y} ${-(body_h/2 + clearance) + wheel_r}" rpy="-1.5708 0 0"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+    <gazebo reference="${name}_wheel">
+      <mu1>1.5</mu1>
+      <mu2>1.5</mu2>
+      <kp>1000000.0</kp>
+      <kd>10.0</kd>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:wheel name="left"  y="${wheel_y}"/>
+  <xacro:wheel name="right" y="${-wheel_y}"/>
+
+  <!-- Sarhoş Destek Tekerlekleri (Caster) -->
+  <xacro:macro name="caster" params="name x">
+    <link name="${name}_caster">
+      <visual>
+        <geometry><sphere radius="${caster_r}"/></geometry>
+        <material name="matte_dark"/>
+      </visual>
+      <collision>
+        <geometry><sphere radius="${caster_r}"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05"/>
+        <inertia ixx="1e-5" iyy="1e-5" izz="1e-5" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+    <joint name="${name}_caster_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}_caster"/>
+      <origin xyz="${x} 0 ${-(body_h/2 + clearance) + caster_r + 0.008}"/>
+    </joint>
+    <gazebo reference="${name}_caster">
+      <mu1>0.001</mu1>
+      <mu2>0.001</mu2>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:caster name="front" x="${caster_x}"/>
+  <xacro:caster name="rear"  x="${-caster_x}"/>
+
+  <!-- Taşıyıcı Direk (Mast) -->
+  <xacro:property name="mast_r" value="0.012"/>
+  <xacro:property name="mast_h" value="0.20"/>
+  <link name="mast_link">
+    <visual>
+      <geometry><cylinder radius="${mast_r}" length="${mast_h}"/></geometry>
+      <material name="matte_dark"/>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="${mast_r}" length="${mast_h}"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.10"/>
+      <inertia ixx="1e-4" iyy="1e-4" izz="1e-5" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="mast_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="mast_link"/>
+    <origin xyz="0 0 ${body_h/2 + mast_h/2}"/>
+  </joint>
+
+  <!-- Gazebo Diferansiyel Sürüş Eklentisi -->
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>${2*wheel_y}</wheel_separation>
+      <wheel_radius>${wheel_r}</wheel_radius>
+      <topic>cmd_vel</topic>
+      <odom_topic>odom</odom_topic>
+      <tf_topic>tf</tf_topic>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_link</child_frame_id>
+      <odom_publish_frequency>30</odom_publish_frequency>
+      <max_linear_acceleration>5.0</max_linear_acceleration>
+      <min_linear_acceleration>-5.0</min_linear_acceleration>
+      <max_angular_acceleration>5.0</max_angular_acceleration>
+      <min_angular_acceleration>-5.0</min_angular_acceleration>
+      <max_linear_velocity>1.0</max_linear_velocity>
+      <min_linear_velocity>-1.0</min_linear_velocity>
+      <max_wheel_torque>25.0</max_wheel_torque>
+    </plugin>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>joint_states</topic>
+    </plugin>
+  </gazebo>
+
+  <xacro:include filename="sensor_lidar.xacro"/>
+  <xacro:include filename="sensor_camera.xacro"/>
+  <xacro:include filename="sensor_imu.xacro"/>
+  <xacro:include filename="sensor_bumper.xacro"/>
+</robot>

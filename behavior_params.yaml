@@ -1,0 +1,19 @@
+# Uye C: davranis esikleri ve hizlari (behavior_node parametreleri)
+behavior_node:
+  ros__parameters:
+    use_sim_time: true
+    default_speed: 0.2          # m/s, hicbir davranis devrede degilken
+    rate_hz: 20.0
+    sensor_timeout: 1.0         # s, IMU bu surede gelmezse tilt_guard devre disi
+    tilt:
+      slow_deg: 8.0             # rampa 6 derece: rampada yavaslamasin, durmasin
+      stop_deg: 18.0            # bu egimde dur (devrilme riski)
+      min_scale: 0.5            # yavaslamada en dusuk hiz carpani
+      lpf_alpha: 0.2            # alcak geciren filtre
+      hysteresis_deg: 2.0
+    bumper:
+      reverse_speed: -0.12      # m/s
+      reverse_time: 1.0         # s
+      offset_m: 0.18            # A'nin apply_offset limiti 0.22
+      offset_length_m: 0.80
+      cooldown: 1.0
