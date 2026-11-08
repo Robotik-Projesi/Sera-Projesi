@@ -6,5 +6,4 @@ install/
 log/
 .vscode/
 .idea/
-*.mp4
 *.mkv
