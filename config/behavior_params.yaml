@@ -1,0 +1,7 @@
+behavior_node:
+  ros__parameters:
+    max_tilt_angle_rad: 0.35
+    warning_tilt_angle_rad: 0.15
+    recovery_speed: -0.2
+    recovery_duration_sec: 1.5
+    default_forward_speed: 0.3
