@@ -22,7 +22,7 @@ setup(
     entry_points={
         'console_scripts': [
         'lidar_standalone_tester = my_robot_pkg.test_runner_node:main',
-            #'behavior_node = my_robot_pkg.behavior_node:main',
+            'behavior_node = my_robot_pkg.behavior_node:main',
         ],
     },
 )
