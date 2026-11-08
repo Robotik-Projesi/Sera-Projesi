@@ -15,6 +15,7 @@ def generate_launch_description():
     xacro_file = os.path.join(pkg, 'urdf', 'robot.urdf.xacro')
     bridge_cfg = os.path.join(pkg, 'config', 'bridge.yaml')
     rviz_cfg = os.path.join(pkg, 'rviz', 'robot.rviz')
+    behavior_cfg = os.path.join(pkg, 'config', 'behavior_params.yaml')
     
     # Doğrudan src klasöründeki tam yolu alıyoruz:
     home_dir = os.path.expanduser('~')
@@ -58,4 +59,9 @@ def generate_launch_description():
         output='screen'
     )
 
-    return LaunchDescription([world_arg, spawn_x_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz, tomato_counter])
+    # Uye C: tek /cmd_vel cikisi (bumper > tilt > lidar > varsayilan)
+    behavior = Node(package='my_robot_pkg', executable='behavior_node',
+                    name='behavior_node', output='screen', parameters=[behavior_cfg])
+
+    return LaunchDescription([world_arg, spawn_x_arg, spawn_y_arg, gz, rsp, spawn, bridge, rviz,
+                              tomato_counter, behavior])
